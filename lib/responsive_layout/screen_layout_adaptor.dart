@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utilities/dimensions.dart';
+
 class ScreenLayoutAdaptor extends StatelessWidget {
   final Widget webScreen;
   final Widget mobileScreen;
@@ -11,7 +13,7 @@ class ScreenLayoutAdaptor extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth > 600) {
+        if (constraints.maxWidth > webScreenSize) {
           //web screen
           return webScreen;
         }
