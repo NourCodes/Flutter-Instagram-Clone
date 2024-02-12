@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/firebase_options.dart';
+import 'package:instagram_clone/pages/login_page.dart';
 import 'package:instagram_clone/responsive_layout/mobile_layout.dart';
 import 'package:instagram_clone/responsive_layout/screen_layout_adaptor.dart';
 import 'package:instagram_clone/responsive_layout/web_layout.dart';
 import 'package:instagram_clone/utilities/colors.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const App());
 }
 
@@ -20,10 +24,11 @@ class App extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: mobileBackground,
       ),
-      home: const ScreenLayoutAdaptor(
+      home:
+          const LoginPage(), /*const ScreenLayoutAdaptor(
         mobileScreen: MobileScreen(),
         webScreen: WebScreen(),
-      ),
+      ),*/
     );
   }
 }
