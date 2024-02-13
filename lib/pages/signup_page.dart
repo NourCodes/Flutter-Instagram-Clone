@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/services/auth.dart';
 import 'package:instagram_clone/utilities/colors.dart';
 import 'package:instagram_clone/widgets/text_field.dart';
 
@@ -14,6 +17,7 @@ class _SignupPageState extends State<SignupPage> {
   final _passwordController = TextEditingController();
   final _fullNameController = TextEditingController();
   final _usernameController = TextEditingController();
+  Uint8List? file;
 
   @override
   void dispose() {
@@ -131,7 +135,14 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Auth().signUp(
+                      _emailController.text,
+                      _passwordController.text,
+                      _fullNameController.text,
+                      _usernameController.text,
+                    );
+                  },
                   child: const Text(
                     "Sign Up",
                     style: TextStyle(

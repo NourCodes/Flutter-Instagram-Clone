@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/firebase_options.dart';
 import 'package:instagram_clone/pages/login_page.dart';
+import 'package:instagram_clone/pages/signup_page.dart';
 import 'package:instagram_clone/responsive_layout/mobile_layout.dart';
 import 'package:instagram_clone/responsive_layout/screen_layout_adaptor.dart';
 import 'package:instagram_clone/responsive_layout/web_layout.dart';
@@ -25,7 +26,7 @@ class App extends StatelessWidget {
         scaffoldBackgroundColor: mobileBackground,
       ),
       home:
-          const LoginPage(), /*const ScreenLayoutAdaptor(
+          const SignupPage(), /*const ScreenLayoutAdaptor(
         mobileScreen: MobileScreen(),
         webScreen: WebScreen(),
       ),*/
