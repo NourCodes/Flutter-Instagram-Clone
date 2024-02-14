@@ -1,5 +1,5 @@
+import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'data.dart';
 
 class Auth {
@@ -12,6 +12,7 @@ class Auth {
     String password,
     String fullName,
     String userName,
+    Uint8List file,
   ) async {
     try {
       if (email.isNotEmpty &&

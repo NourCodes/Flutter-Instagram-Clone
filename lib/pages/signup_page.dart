@@ -1,8 +1,9 @@
 import 'dart:typed_data';
-
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/services/auth.dart';
 import 'package:instagram_clone/utilities/colors.dart';
+import 'package:instagram_clone/utilities/utils.dart';
 import 'package:instagram_clone/widgets/text_field.dart';
 
 class SignupPage extends StatefulWidget {
@@ -17,13 +18,20 @@ class _SignupPageState extends State<SignupPage> {
   final _passwordController = TextEditingController();
   final _fullNameController = TextEditingController();
   final _usernameController = TextEditingController();
-  Uint8List? file;
+  Uint8List? _file;
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  void getImage() async {
+    Uint8List image = await uploadImage(ImageSource.gallery);
+    setState(() {
+      _file = image;
+    });
   }
 
   @override
@@ -59,15 +67,24 @@ class _SignupPageState extends State<SignupPage> {
                 Stack(
                   alignment: Alignment.bottomRight,
                   children: [
-                    const CircleAvatar(
-                      radius: 50,
-                      backgroundColor: Colors.grey,
-                    ),
+                    _file != null
+                        ? CircleAvatar(
+                            radius: 50,
+                            backgroundImage: MemoryImage(
+                              _file!,
+                            ),
+                          )
+                        : const CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Colors.grey,
+                          ),
                     Positioned(
                       bottom: -10,
                       left: 60,
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          getImage();
+                        },
                         icon:
                             const Icon(Icons.add_a_photo, color: Colors.white),
                       ),
@@ -141,6 +158,7 @@ class _SignupPageState extends State<SignupPage> {
                       _passwordController.text,
                       _fullNameController.text,
                       _usernameController.text,
+                      _file!,
                     );
                   },
                   child: const Text(
