@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'data.dart';
+
 class Auth {
-  //create aan instance of firebase auth
+  //create an instance of firebase auth
   final _firebaseAuth = FirebaseAuth.instance;
 
   //sign up method
@@ -20,6 +22,9 @@ class Auth {
             await _firebaseAuth.createUserWithEmailAndPassword(
                 email: email.trim(), password: password.trim());
         User? user = result.user;
+
+        // add user details to firestore
+        Data().saveUserData(email, password, fullName, userName, user!.uid);
 
         return user;
       }
