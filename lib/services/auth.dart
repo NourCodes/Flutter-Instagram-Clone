@@ -18,14 +18,16 @@ class Auth {
       if (email.isNotEmpty &&
           password.isNotEmpty &&
           fullName.isNotEmpty &&
-          userName.isNotEmpty) {
+          userName.isNotEmpty &&
+          file.isNotEmpty) {
         UserCredential result =
             await _firebaseAuth.createUserWithEmailAndPassword(
                 email: email.trim(), password: password.trim());
         User? user = result.user;
 
         // add user details to firestore
-        Data().saveUserData(email, password, fullName, userName, user!.uid);
+        Data()
+            .saveUserData(email, password, fullName, userName, user!.uid, file);
 
         return user;
       }
