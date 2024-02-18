@@ -1,40 +1,59 @@
 import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'data.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Auth {
   //create an instance of firebase auth
   final _firebaseAuth = FirebaseAuth.instance;
 
   //sign up method
-  Future<Object?> signUp(
+  Future<void> signUp(
     String email,
     String password,
     String fullName,
     String userName,
     Uint8List file,
   ) async {
+    String message = "";
+
     try {
-      if (email.isNotEmpty &&
-          password.isNotEmpty &&
-          fullName.isNotEmpty &&
-          userName.isNotEmpty &&
-          file.isNotEmpty) {
+      if (email.isEmpty) {
+        // display an error message if the email field is empty
+        message = 'Please enter your email';
+      } else if (password.isEmpty ||
+          fullName.isEmpty ||
+          userName.isEmpty) {
+        // display an error message if any other required fields are empty
+        message = 'Please fill in all the required fields';
+      } else {
+        // proceed with sign-up if all fields are filled
         UserCredential result =
             await _firebaseAuth.createUserWithEmailAndPassword(
                 email: email.trim(), password: password.trim());
         User? user = result.user;
 
-        // add user details to firestore
+        // add user details to Firestore
         Data()
             .saveUserData(email, password, fullName, userName, user!.uid, file);
-
-        return user;
+        message = 'Successfully Signed Up';
       }
-      return null;
     } catch (e) {
-      return e.toString();
+      // handle other errors
+      message = 'An error occurred: ${e.toString()}';
     }
+
+    // display the error message
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.grey,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
   }
 
 // log in method

@@ -5,20 +5,20 @@ class TextFiledWidget extends StatelessWidget {
   final String hintText;
   final TextInputType inputType;
   final TextEditingController controller;
-  const TextFiledWidget(
-      {Key? key,
-      required this.obscure,
-      required this.hintText,
-      required this.inputType,
-      required this.controller})
-      : super(key: key);
+  const TextFiledWidget({
+    Key? key,
+    required this.obscure,
+    required this.hintText,
+    required this.inputType,
+    required this.controller,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final inputBorder = OutlineInputBorder(
       borderSide: Divider.createBorderSide(context),
     );
-    return TextField(
+    return TextFormField(
       controller: controller,
       decoration: InputDecoration(
         border: inputBorder,
