@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/utilities/colors.dart';
+import 'package:instagram_clone/utilities/utils.dart';
 import 'package:instagram_clone/widgets/text_field.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../services/auth.dart';
@@ -88,14 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                       await Auth().login(
                           _emailController.text, _passwordController.text);
                     } else {
-                      Fluttertoast.showToast(
-                          msg: "Please make sure to fill all the data",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.TOP,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.grey,
-                          textColor: Colors.white,
-                          fontSize: 16.0);
+                      showMessage("Please make sure to fill all the data");
                     }
                   },
                   child: const Text(

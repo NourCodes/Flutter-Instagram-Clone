@@ -166,14 +166,7 @@ class _SignupPageState extends State<SignupPage> {
                           _file!,
                         );
                       } else {
-                        Fluttertoast.showToast(
-                            msg: "Please make sure to fill all the data",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.TOP,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.grey,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
+                        showMessage("Please make sure to fill all the data");
                       }
                     },
                     child: const Text(

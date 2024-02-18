@@ -1,8 +1,7 @@
 import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:instagram_clone/utilities/utils.dart';
 import 'data.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class Auth {
   //create an instance of firebase auth
@@ -43,15 +42,7 @@ class Auth {
     }
 
     // display the error message
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.grey,
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
+    showMessage(message);
   }
 
 // log in method
@@ -74,13 +65,6 @@ class Auth {
       message = e.toString();
     }
 
-    Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.TOP,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.grey,
-        textColor: Colors.white,
-        fontSize: 16.0);
+    showMessage(message);
   }
 }

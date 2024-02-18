@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 // this method takes an 'ImageSource' as input and returns a Future Uint8List
 uploadImage(ImageSource source) async {
@@ -13,4 +15,15 @@ uploadImage(ImageSource source) async {
     // if an image was picked, read the bytes of the file asynchronously and return the file as Uint8List
     return await _file.readAsBytes();
   }
+}
+
+showMessage(String message) {
+  return Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.TOP,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.grey,
+      textColor: Colors.white,
+      fontSize: 16.0);
 }
