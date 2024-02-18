@@ -16,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
   @override
   void dispose() {
     _emailController.dispose();
@@ -72,33 +73,45 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 20,
                 ),
-
-                // button login
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: blue,
-                    fixedSize: Size(MediaQuery.of(context).size.width, 50),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(4),
+                _isLoading
+                    ? const CircularProgressIndicator(
+                        color: primaryColor,
+                      )
+                    :
+                    // button login
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: blue,
+                          fixedSize:
+                              Size(MediaQuery.of(context).size.width, 50),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(4),
+                            ),
+                          ),
+                        ),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            await Auth().login(_emailController.text,
+                                _passwordController.text);
+                            setState(() {
+                              _isLoading = false;
+                            });
+                          } else {
+                            showMessage(
+                                "Please make sure to fill all the data");
+                          }
+                        },
+                        child: const Text(
+                          "Log in",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await Auth().login(
-                          _emailController.text, _passwordController.text);
-                    } else {
-                      showMessage("Please make sure to fill all the data");
-                    }
-                  },
-                  child: const Text(
-                    "Log in",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
                 const SizedBox(
                   height: 10,
                 ),

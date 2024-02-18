@@ -21,6 +21,7 @@ class _SignupPageState extends State<SignupPage> {
   final _usernameController = TextEditingController();
   Uint8List? _file;
   final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -145,37 +146,51 @@ class _SignupPageState extends State<SignupPage> {
                     height: 23,
                   ),
 
-                  // button login
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: blue,
-                      fixedSize: Size(MediaQuery.of(context).size.width, 50),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(4),
+                  _isLoading
+                      ? const CircularProgressIndicator(
+                          color: primaryColor,
+                        )
+                      :
+                      // button login
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: blue,
+                            fixedSize:
+                                Size(MediaQuery.of(context).size.width, 50),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(4),
+                              ),
+                            ),
+                          ),
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate() &&
+                                _file != null) {
+                              setState(() {
+                                _isLoading = true;
+                              });
+                              await Auth().signUp(
+                                _emailController.text,
+                                _passwordController.text,
+                                _fullNameController.text,
+                                _usernameController.text,
+                                _file!,
+                              );
+                              setState(() {
+                                _isLoading = false;
+                              });
+                            } else {
+                              showMessage(
+                                  "Please make sure to fill all the data");
+                            }
+                          },
+                          child: const Text(
+                            "Sign Up",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate() && _file != null) {
-                        await Auth().signUp(
-                          _emailController.text,
-                          _passwordController.text,
-                          _fullNameController.text,
-                          _usernameController.text,
-                          _file!,
-                        );
-                      } else {
-                        showMessage("Please make sure to fill all the data");
-                      }
-                    },
-                    child: const Text(
-                      "Sign Up",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
                   const SizedBox(
                     height: 55,
                   ),
