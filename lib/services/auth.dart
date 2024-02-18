@@ -22,9 +22,7 @@ class Auth {
       if (email.isEmpty) {
         // display an error message if the email field is empty
         message = 'Please enter your email';
-      } else if (password.isEmpty ||
-          fullName.isEmpty ||
-          userName.isEmpty) {
+      } else if (password.isEmpty || fullName.isEmpty || userName.isEmpty) {
         // display an error message if any other required fields are empty
         message = 'Please fill in all the required fields';
       } else {
@@ -57,17 +55,32 @@ class Auth {
   }
 
 // log in method
-  Future<Object?> login(String email, String password) async {
+  Future<void> login(String email, String password) async {
+    String message = '';
     try {
-      if (email.isNotEmpty && password.isNotEmpty) {
+      if (email.isEmpty) {
+        // display an error message if the email field is empty
+        message = 'Please enter your email';
+      } else if (password.isEmpty) {
+        message = 'Please enter your password';
+      } else {
+        // proceed with login if all fields are filled
         UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
             email: email.trim(), password: password.trim());
         User? user = result.user;
-        return user!;
+        message = 'Successfully Logged In';
       }
-      return null;
     } catch (e) {
-      return e.toString();
+      message = e.toString();
     }
+
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 }
