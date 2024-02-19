@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:instagram_clone/model/user_model.dart';
 import 'package:instagram_clone/utilities/utils.dart';
 import 'data.dart';
 
@@ -8,7 +9,7 @@ class Auth {
   final _firebaseAuth = FirebaseAuth.instance;
 
   //sign up method
-  Future<void> signUp(
+  Future<UserModel?> signUp(
     String email,
     String password,
     String fullName,
@@ -35,6 +36,7 @@ class Auth {
         Data()
             .saveUserData(email, password, fullName, userName, user!.uid, file);
         message = 'Successfully Signed Up';
+        return _userFromFirebase(user);
       }
     } catch (e) {
       // handle other errors
@@ -43,10 +45,11 @@ class Auth {
 
     // display the error message
     showMessage(message);
+    return null;
   }
 
 // log in method
-  Future<void> login(String email, String password) async {
+  Future<UserModel?> login(String email, String password) async {
     String message = '';
     try {
       if (email.isEmpty) {
@@ -59,12 +62,27 @@ class Auth {
         UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
             email: email.trim(), password: password.trim());
         User? user = result.user;
+
         message = 'Successfully Logged In';
+        return _userFromFirebase(user!);
       }
     } catch (e) {
       message = e.toString();
     }
 
     showMessage(message);
+    return null;
+  }
+
+  UserModel? _userFromFirebase(User user) {
+    return UserModel(
+      id: user.uid,
+    );
+  }
+
+  Stream<UserModel?> get users {
+    return _firebaseAuth
+        .authStateChanges()
+        .map((user) => user != null ? UserModel(id: user.uid) : null);
   }
 }

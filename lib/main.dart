@@ -1,11 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/firebase_options.dart';
-import 'package:instagram_clone/pages/login_page.dart';
-import 'package:instagram_clone/pages/signup_page.dart';
-import 'package:instagram_clone/responsive_layout/mobile_layout.dart';
-import 'package:instagram_clone/responsive_layout/screen_layout_adaptor.dart';
-import 'package:instagram_clone/responsive_layout/web_layout.dart';
+import 'package:instagram_clone/pages/auth_state_wrapper.dart';
 import 'package:instagram_clone/utilities/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -25,11 +21,7 @@ class App extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: mobileBackground,
       ),
-      home:
-          const SignupPage(), /*const ScreenLayoutAdaptor(
-        mobileScreen: MobileScreen(),
-        webScreen: WebScreen(),
-      ),*/
+      home: const AuthStateWrapper(),
     );
   }
 }
