@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/model/user_model.dart';
-import 'package:instagram_clone/pages/login_page.dart';
+import 'package:instagram_clone/pages/auth_page.dart';
 import 'package:instagram_clone/services/auth.dart';
 import 'package:instagram_clone/utilities/colors.dart';
 import '../responsive_layout/mobile_layout.dart';
@@ -40,7 +39,7 @@ class _AuthStateWrapperState extends State<AuthStateWrapper> {
             ),
           );
         }
-        return const LoginPage();
+        return const AuthPage();
       },
     );
   }

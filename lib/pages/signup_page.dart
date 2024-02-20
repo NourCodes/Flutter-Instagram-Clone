@@ -7,7 +7,8 @@ import 'package:instagram_clone/utilities/utils.dart';
 import 'package:instagram_clone/widgets/text_field.dart';
 
 class SignupPage extends StatefulWidget {
-  const SignupPage({Key? key}) : super(key: key);
+  final Function()? screen;
+  const SignupPage({Key? key, this.screen}) : super(key: key);
 
   @override
   State<SignupPage> createState() => _SignupPageState();
@@ -202,7 +203,7 @@ class _SignupPageState extends State<SignupPage> {
                     children: [
                       const Text("Already Registered?"),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: widget.screen,
                         child: const Text(
                           "Log in.",
                           style: TextStyle(

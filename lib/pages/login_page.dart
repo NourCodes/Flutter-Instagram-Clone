@@ -5,7 +5,8 @@ import 'package:instagram_clone/widgets/text_field.dart';
 import '../services/auth.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  final Function()? screen;
+  const LoginPage({Key? key, this.screen}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -152,11 +153,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 // text button for signing up
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text("Don't have an account?"),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: widget.screen,
                       child: const Text(
                         "Sign up.",
                         style: TextStyle(
