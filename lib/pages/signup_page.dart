@@ -5,7 +5,6 @@ import 'package:instagram_clone/services/auth.dart';
 import 'package:instagram_clone/utilities/colors.dart';
 import 'package:instagram_clone/utilities/utils.dart';
 import 'package:instagram_clone/widgets/text_field.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -180,8 +179,12 @@ class _SignupPageState extends State<SignupPage> {
                                 _isLoading = false;
                               });
                             } else {
-                              showMessage(
-                                  "Please make sure to fill all the data");
+                              //show error message
+                              ElevatedButton(
+                                onPressed: showMessage(
+                                    "Please make sure to fill all the data"),
+                                child: const Text(""),
+                              );
                             }
                           },
                           child: const Text(

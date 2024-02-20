@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:oktoast/oktoast.dart';
 
 // this method takes an 'ImageSource' as input and returns a Future Uint8List
 uploadImage(ImageSource source) async {
@@ -17,13 +17,10 @@ uploadImage(ImageSource source) async {
   }
 }
 
-showMessage(String message) {
-  return Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.TOP,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.grey,
-      textColor: Colors.white,
-      fontSize: 16.0);
+showMessage(String msg) {
+  showToast(
+    msg,
+    position: const ToastPosition(align: Alignment.topCenter),
+    duration: const Duration(seconds: 5),
+  );
 }
