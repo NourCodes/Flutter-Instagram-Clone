@@ -53,6 +53,7 @@ dev_dependencies:
   image_picker:
   cupertino_icons:
   oktoast: ^3.4.0
+  provider:
   # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

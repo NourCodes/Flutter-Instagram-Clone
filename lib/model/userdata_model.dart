@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserDataModel {
   final String id;
   final String email;
@@ -28,5 +30,21 @@ class UserDataModel {
       'followers': followers,
       'following': following,
     };
+  }
+
+  // static method to construct a UserDataModel instance from a Firestore document snapshot
+  // This method takes a DocumentSnapshot as input, extracts the necessary data from it,
+  // and constructs a UserDataModel instance with the extracted data
+  static UserDataModel fromSnap(DocumentSnapshot snap) {
+    var snapshot = (snap.data() as Map<String, dynamic>);
+    return UserDataModel(
+        email: snapshot['email'],
+        fullName: snapshot['full name'],
+        userName: snapshot['username'],
+        password: snapshot['password'],
+        imageUrl: snapshot['image'],
+        followers: snapshot['followers'],
+        following: snapshot['following'],
+        id: snapshot['id']);
   }
 }
