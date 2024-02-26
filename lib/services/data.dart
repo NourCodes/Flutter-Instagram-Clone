@@ -18,7 +18,6 @@ class Data {
         await _firestore.collection('users').doc(currUser.uid).get();
     // construct a UserDataModel instance from the retrieved data
     UserDataModel userData = UserDataModel.fromSnap(userDataSnap);
-
     return userData;
   }
 
@@ -27,7 +26,7 @@ class Data {
   Future<void> saveUserData(String email, String password, String fullName,
       String userName, String id, Uint8List file) async {
     // upload user profile image to storage and get the image URL
-    String imageUrl = await Storage().uploadImage(file, false);
+    String imageUrl = await Storage().uploadImage(file, false, "profileImages");
 
     // create a UserDataModel instance with provided data
     UserDataModel userData = UserDataModel(

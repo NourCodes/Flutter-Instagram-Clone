@@ -1,9 +1,14 @@
 import 'dart:typed_data';
+import 'package:instagram_clone/model/userdata_model.dart';
+import 'package:instagram_clone/provider/userdata_provider.dart';
+import 'package:instagram_clone/services/auth.dart';
+import 'package:instagram_clone/services/data.dart';
 import 'package:instagram_clone/utilities/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/utilities/colors.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class AddPostPage extends StatefulWidget {
   const AddPostPage({Key? key}) : super(key: key);
@@ -70,12 +75,20 @@ class _AddPostPageState extends State<AddPostPage> {
 
   @override
   Widget build(BuildContext context) {
+    UserDataModel userData = Provider.of<UserDataProvider>(context).getUserData;
+
     return (_image == null)
-        ? Center(
-            child: IconButton(
-              icon: const Icon(Icons.upload),
-              onPressed: getImage,
-            ),
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(
+                child: IconButton(
+                  icon: const Icon(Icons.upload),
+                  onPressed: getImage,
+                ),
+              ),
+            ],
           )
         : Scaffold(
             appBar: AppBar(
@@ -86,8 +99,9 @@ class _AddPostPageState extends State<AddPostPage> {
                   Icons.arrow_back,
                 ),
               ),
-              title: const Text(
-                "Post to",
+              title: Text(
+                userData.userName,
+                style: const TextStyle(color: Colors.white),
               ),
               centerTitle: false,
               actions: [
@@ -110,9 +124,9 @@ class _AddPostPageState extends State<AddPostPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"),
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(userData.imageUrl ??
+                          'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'), // Provide a placeholder image
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.45,

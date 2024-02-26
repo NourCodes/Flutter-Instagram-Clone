@@ -10,11 +10,12 @@ class Storage {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //uploads an image file to Firebase Storage and returns the download URL
-  Future<String> uploadImage(Uint8List file, bool isPost) async {
+  Future<String> uploadImage(
+      Uint8List file, bool isPost, String directoryName) async {
     // create a reference to the Firebase Storage location
     Reference ref = _storage
         .ref() //gets the reference to the root of the storage
-        .child("profileImages") // create a directory for user images
+        .child(directoryName) // create a directory for user images
         .child(_auth.currentUser!
             .uid); // set a unique file name based on the user's UID
 

@@ -24,6 +24,7 @@ class UserDataModel {
   Map<String, dynamic> toJson() {
     return {
       'email': email,
+      'full name': fullName,
       'username': userName,
       'id': id,
       'photoUrl': imageUrl,
@@ -32,19 +33,23 @@ class UserDataModel {
     };
   }
 
-  // static method to construct a UserDataModel instance from a Firestore document snapshot
-  // This method takes a DocumentSnapshot as input, extracts the necessary data from it,
-  // and constructs a UserDataModel instance with the extracted data
+  // Static method to construct a UserDataModel instance from a Firestore document snapshot
   static UserDataModel fromSnap(DocumentSnapshot snap) {
-    var snapshot = (snap.data() as Map<String, dynamic>);
+    var snapshot = snap.data() as Map<String, dynamic>?;
+
+    if (snapshot == null) {
+      throw Exception("Snapshot data is null");
+    }
+
     return UserDataModel(
-        email: snapshot['email'],
-        fullName: snapshot['full name'],
-        userName: snapshot['username'],
-        password: snapshot['password'],
-        imageUrl: snapshot['image'],
-        followers: snapshot['followers'],
-        following: snapshot['following'],
-        id: snapshot['id']);
+      email: snapshot['email'] ?? '',
+      fullName: snapshot['full name'] ?? '',
+      userName: snapshot['username'] ?? '',
+      password: snapshot['password'] ?? '',
+      imageUrl: snapshot['photoUrl'] ?? '',
+      followers: List.from(snapshot['followers'] ?? []),
+      following: List.from(snapshot['following'] ?? []),
+      id: snapshot['id'] ?? '',
+    );
   }
 }
