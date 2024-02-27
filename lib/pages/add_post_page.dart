@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'package:instagram_clone/model/userdata_model.dart';
 import 'package:instagram_clone/provider/userdata_provider.dart';
 import 'package:instagram_clone/services/auth.dart';
@@ -19,7 +20,14 @@ class AddPostPage extends StatefulWidget {
 
 class _AddPostPageState extends State<AddPostPage> {
   Uint8List? _image;
+
   final TextEditingController _controller = TextEditingController();
+  Future<void> postImage(
+      String id, String username, String profileImage) async {
+    await Data()
+        .uploadPost(id, username, _image!, _controller.text, profileImage);
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -100,13 +108,14 @@ class _AddPostPageState extends State<AddPostPage> {
                 ),
               ),
               title: Text(
-                userData.userName,
+                'Post to ${userData.userName}',
                 style: const TextStyle(color: Colors.white),
               ),
               centerTitle: false,
               actions: [
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () => postImage(
+                      userData.id, userData.userName, userData.imageUrl),
                   child: const Text(
                     "Post",
                     style: TextStyle(

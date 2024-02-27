@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:uuid/uuid.dart';
 
 class Storage {
   // create an instance of Firebase Storage
@@ -18,6 +19,12 @@ class Storage {
         .child(directoryName) // create a directory for user images
         .child(_auth.currentUser!
             .uid); // set a unique file name based on the user's UID
+
+    if (isPost) {
+      // if it's a post, generate a unique ID for the image
+      String id = const Uuid().v1();
+      ref = ref.child(id);
+    }
 
     // upload the image file to Firebase Storage
     await ref.putData(file);
