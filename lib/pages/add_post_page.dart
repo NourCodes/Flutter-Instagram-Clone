@@ -20,18 +20,31 @@ class AddPostPage extends StatefulWidget {
 
 class _AddPostPageState extends State<AddPostPage> {
   Uint8List? _image;
-
   final TextEditingController _controller = TextEditingController();
+  bool _isLoading = false;
   Future<void> postImage(
       String id, String username, String profileImage) async {
+    setState(() {
+      _isLoading = true;
+    });
     await Data()
         .uploadPost(id, username, _image!, _controller.text, profileImage);
+    setState(() {
+      _isLoading = false;
+      clearImage();
+    });
   }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void clearImage() {
+    setState(() {
+      _image = null;
+    });
   }
 
   getImage() async {
@@ -129,46 +142,50 @@ class _AddPostPageState extends State<AddPostPage> {
             ),
             body: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(userData.imageUrl ??
-                          'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'), // Provide a placeholder image
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      child: TextField(
-                        controller: _controller,
-                        decoration: const InputDecoration(
-                          hintText: "Write a caption",
-                          border: InputBorder.none,
-                        ),
-                        maxLines: 6,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 45,
-                      width: 45,
-                      child: AspectRatio(
-                        aspectRatio: 480 / 445,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: MemoryImage(
-                                _image!,
+                _isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CircleAvatar(
+                            backgroundImage: NetworkImage(userData.imageUrl ??
+                                'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'), // Provide a placeholder image
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.45,
+                            child: TextField(
+                              controller: _controller,
+                              decoration: const InputDecoration(
+                                hintText: "Write a caption",
+                                border: InputBorder.none,
                               ),
-                              fit: BoxFit.fill,
-                              alignment: Alignment.topCenter,
+                              maxLines: 6,
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                    const Divider(),
-                  ],
-                )
+                          SizedBox(
+                            height: 45,
+                            width: 45,
+                            child: AspectRatio(
+                              aspectRatio: 480 / 445,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: MemoryImage(
+                                      _image!,
+                                    ),
+                                    fit: BoxFit.fill,
+                                    alignment: Alignment.topCenter,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const Divider(),
+                        ],
+                      )
               ],
             ),
           );
