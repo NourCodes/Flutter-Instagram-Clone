@@ -1,11 +1,8 @@
 import 'dart:typed_data';
-
 import 'package:instagram_clone/model/userdata_model.dart';
 import 'package:instagram_clone/provider/userdata_provider.dart';
-import 'package:instagram_clone/services/auth.dart';
 import 'package:instagram_clone/services/data.dart';
 import 'package:instagram_clone/utilities/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/utilities/colors.dart';
 import 'package:image_picker/image_picker.dart';
@@ -115,7 +112,7 @@ class _AddPostPageState extends State<AddPostPage> {
             appBar: AppBar(
               backgroundColor: mobileBackground,
               leading: IconButton(
-                onPressed: () {},
+                onPressed: clearImage,
                 icon: const Icon(
                   Icons.arrow_back,
                 ),
@@ -151,8 +148,9 @@ class _AddPostPageState extends State<AddPostPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CircleAvatar(
-                            backgroundImage: NetworkImage(userData.imageUrl ??
-                                'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=1931&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'), // Provide a placeholder image
+                            backgroundImage: NetworkImage(
+                              userData.imageUrl,
+                            ),
                           ),
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.45,
@@ -185,7 +183,7 @@ class _AddPostPageState extends State<AddPostPage> {
                           ),
                           const Divider(),
                         ],
-                      )
+                      ),
               ],
             ),
           );

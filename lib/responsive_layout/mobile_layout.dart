@@ -1,12 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/pages/add_post_page.dart';
+import 'package:instagram_clone/pages/feed_page.dart';
 import 'package:instagram_clone/pages/profile_page.dart';
-import 'package:instagram_clone/provider/userdata_provider.dart';
 import 'package:instagram_clone/widgets/bottom_nav_bar.dart';
-import 'package:provider/provider.dart';
-import 'package:instagram_clone/model/userdata_model.dart';
-import '../pages/home_page.dart';
 import '../pages/like_page.dart';
 import '../pages/search_page.dart';
 
@@ -26,7 +22,7 @@ class _MobileScreenState extends State<MobileScreen> {
   }
 
   List<Widget> lists = const [
-    HomePage(),
+    FeedPage(),
     SearchPage(),
     AddPostPage(),
     LikePage(),
