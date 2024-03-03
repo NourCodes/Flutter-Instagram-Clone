@@ -1,18 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:instagram_clone/utilities/colors.dart';
+import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PostCard extends StatelessWidget {
   final String username;
   final String userImage;
+  final Timestamp date;
   final String profImage;
-  const PostCard(
-      {Key? key,
-      required this.username,
-      required this.userImage,
-      required this.profImage})
-      : super(key: key);
+  final String description;
+  final List likes;
+  const PostCard({
+    Key? key,
+    required this.username,
+    required this.userImage,
+    required this.date,
+    required this.profImage,
+    required this.likes,
+    required this.description,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +116,7 @@ class PostCard extends StatelessWidget {
                         fontWeight: FontWeight.w900,
                       ),
                   child: Text(
-                    "1000 likes",
+                    "${likes.isNotEmpty ? likes.length : 1000} likes",
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -120,19 +127,19 @@ class PostCard extends StatelessWidget {
                     top: 6,
                   ),
                   child: RichText(
-                    text: const TextSpan(
-                      style: TextStyle(
+                    text: TextSpan(
+                      style: const TextStyle(
                         color: primaryColor,
                       ),
                       children: [
                         TextSpan(
-                          text: "username",
-                          style: TextStyle(
+                          text: username,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         TextSpan(
-                          text: "  This the description",
+                          text: "  $description",
                         ),
                       ],
                     ),
@@ -161,9 +168,9 @@ class PostCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                     vertical: 4,
                   ),
-                  child: const Text(
-                    "3/3/2024",
-                    style: TextStyle(
+                  child: Text(
+                    DateFormat.yMMMd().format(date.toDate()),
+                    style: const TextStyle(
                       fontSize: 10,
                       color: secondaryColor,
                     ),

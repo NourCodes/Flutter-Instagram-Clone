@@ -63,6 +63,13 @@ class Data {
     showMessage(message);
   }
 
+  Stream<QuerySnapshot<Map<String, dynamic>>> get getPost {
+    return _firestore
+        .collection("posts")
+        .orderBy("datePublished", descending: true)
+        .snapshots();
+  }
+
 //this method takes userdata uploads profile image, creates a new UserDataModel instance using the provided data, converts it
 // to JSON format using the toJson method, and then saves it to the Firestore database
   Future<void> saveUserData(String email, String password, String fullName,
