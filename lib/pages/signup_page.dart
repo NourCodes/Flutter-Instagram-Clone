@@ -24,6 +24,12 @@ class _SignupPageState extends State<SignupPage> {
   bool _isLoading = false;
 
   @override
+  void initState() {
+    Auth().users;
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
