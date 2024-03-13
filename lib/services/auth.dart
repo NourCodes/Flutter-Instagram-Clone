@@ -10,12 +10,12 @@ class Auth {
 
   //sign up method
   Future<UserModel?> signUp(
-    String email,
-    String password,
-    String fullName,
-    String userName,
-    Uint8List file,
-  ) async {
+      String email,
+      String password,
+      String fullName,
+      String userName,
+      Uint8List file,
+      ) async {
     String message = "";
 
     try {
@@ -28,8 +28,8 @@ class Auth {
       } else {
         // proceed with sign-up if all fields are filled
         UserCredential result =
-            await _firebaseAuth.createUserWithEmailAndPassword(
-                email: email.trim(), password: password.trim());
+        await _firebaseAuth.createUserWithEmailAndPassword(
+            email: email.trim(), password: password.trim());
         User? user = result.user;
 
         // add user details to Firestore
@@ -46,6 +46,10 @@ class Auth {
     // display the error message
     showMessage(message);
     return null;
+  }
+
+  String get currentUserId {
+    return _firebaseAuth.currentUser!.uid;
   }
 
 // log in method

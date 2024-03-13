@@ -18,7 +18,7 @@ class Data {
     User currUser = FirebaseAuth.instance.currentUser!;
     // fetch user data snapshot from Firestore
     DocumentSnapshot userDataSnap =
-        await _firestore.collection('users').doc(currUser.uid).get();
+    await _firestore.collection('users').doc(currUser.uid).get();
     // construct a UserDataModel instance from the retrieved data
     UserDataModel userData = UserDataModel.fromSnap(userDataSnap);
     return userData;
@@ -26,12 +26,12 @@ class Data {
 
 // uploads a post to Firestore
   Future uploadPost(
-    String id,
-    String username,
-    Uint8List image,
-    String description,
-    String profileImage,
-  ) async {
+      String id,
+      String username,
+      Uint8List image,
+      String description,
+      String profileImage,
+      ) async {
     // initialize an empty string to store a message
     String message = "";
     try {
@@ -52,8 +52,8 @@ class Data {
       );
       // store the post data in Firestore
       await _firestore.collection("posts").doc(postId).set(
-            post.toJson(),
-          );
+        post.toJson(),
+      );
       message = "Posted";
     } catch (err) {
       // if an error occurs, store the error message
@@ -90,5 +90,24 @@ class Data {
     );
 
     await _firestore.collection("users").doc(id).set(userData.toJson());
+  }
+
+  // this method checks if the user ID is already in the list of likes
+  Future likePost(String postId, String id, List likes) async {
+    try {
+      // if the user has already liked the post, then their ID is removed from the likes list
+      if (likes.contains(id)) {
+        await _firestore.collection("posts").doc(postId).update({
+          "likes": FieldValue.arrayRemove([id]),
+        });
+      } else {
+        // if the user hasn't liked the post yet, then their ID is added to the likes list
+        await _firestore.collection("posts").doc(postId).update({
+          "likes": FieldValue.arrayUnion([id]),
+        });
+      }
+    } catch (e) {
+      return (e.toString());
+    }
   }
 }

@@ -1,10 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:instagram_clone/pages/comments_page.dart';
+import 'package:instagram_clone/services/auth.dart';
 import 'package:instagram_clone/utilities/colors.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../services/data.dart';
+import 'like_animation.dart';
 
-class PostCard extends StatelessWidget {
+class PostCard extends StatefulWidget {
+  final String postId;
   final String username;
   final String userImage;
   final Timestamp date;
@@ -12,17 +18,26 @@ class PostCard extends StatelessWidget {
   final String description;
   final List likes;
   const PostCard({
-    Key? key,
+    super.key,
     required this.username,
     required this.userImage,
     required this.date,
     required this.profImage,
     required this.likes,
     required this.description,
-  }) : super(key: key);
+    required this.postId,
+  });
+
+  @override
+  State<PostCard> createState() => _PostCardState();
+}
+
+class _PostCardState extends State<PostCard> {
+  bool isLikeAnimating = false;
 
   @override
   Widget build(BuildContext context) {
+    String currentUserId = Auth().currentUserId;
     return Container(
       padding: const EdgeInsets.symmetric(
         vertical: 6,
@@ -42,13 +57,13 @@ class PostCard extends StatelessWidget {
                     CircleAvatar(
                       radius: 16,
                       backgroundImage: NetworkImage(
-                        profImage,
+                        widget.profImage,
                       ),
                     ),
                     const SizedBox(
                       width: 6,
                     ),
-                    Text(username),
+                    Text(widget.username),
                   ],
                 ),
                 IconButton(
@@ -62,10 +77,50 @@ class PostCard extends StatelessWidget {
           ),
 
           // Image Section
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.38,
-            width: double.infinity,
-            child: Image.network(userImage),
+
+          GestureDetector(
+            onDoubleTap: () async {
+              await Data().likePost(
+                widget.postId,
+                currentUserId,
+                widget.likes,
+              );
+              setState(() {
+                isLikeAnimating = true;
+              });
+            },
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.38,
+                  width: double.infinity,
+                  child: Image.network(widget.userImage),
+                ),
+                AnimatedOpacity(
+                  duration: const Duration(
+                    milliseconds: 200,
+                  ),
+                  opacity: isLikeAnimating ? 1 : 0,
+                  child: LikeAnimation(
+                    isAnimating: isLikeAnimating,
+                    duration: const Duration(
+                      milliseconds: 400,
+                    ),
+                    child: const Icon(
+                      Icons.favorite,
+                      color: Colors.white,
+                      size: 100,
+                    ),
+                    onEnd: () {
+                      setState(() {
+                        isLikeAnimating = false;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
 
           // Like, Comment, Send, & Save Icons  Section
@@ -74,15 +129,29 @@ class PostCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      CupertinoIcons.heart_fill,
-                      color: Colors.red,
+                  LikeAnimation(
+                    isAnimating: widget.likes.contains(currentUserId),
+                    like: true,
+                    child: IconButton(
+                      onPressed: () async {
+                        await Data().likePost(
+                          widget.postId,
+                          currentUserId,
+                          widget.likes,
+                        );
+                      },
+                      icon: widget.likes.contains(currentUserId)
+                          ? const Icon(
+                        Icons.favorite,
+                        color: Colors.red,
+                      )
+                          : const Icon(
+                        Icons.favorite_border,
+                      ),
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => CommentsPage(),),),
                     icon: const Icon(
                       Icons.comment_outlined,
                     ),
@@ -113,10 +182,10 @@ class PostCard extends StatelessWidget {
                 // likes
                 DefaultTextStyle(
                   style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                        fontWeight: FontWeight.w900,
-                      ),
+                    fontWeight: FontWeight.w900,
+                  ),
                   child: Text(
-                    "${likes.isNotEmpty ? likes.length : 1000} likes",
+                    "${widget.likes.length} likes",
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
@@ -133,13 +202,13 @@ class PostCard extends StatelessWidget {
                       ),
                       children: [
                         TextSpan(
-                          text: username,
+                          text: widget.username,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         TextSpan(
-                          text: "  $description",
+                          text: "  ${widget.description}",
                         ),
                       ],
                     ),
@@ -169,7 +238,9 @@ class PostCard extends StatelessWidget {
                     vertical: 4,
                   ),
                   child: Text(
-                    DateFormat.yMMMd().format(date.toDate()),
+                    DateFormat.yMMMd().format(
+                      widget.date.toDate(),
+                    ),
                     style: const TextStyle(
                       fontSize: 10,
                       color: secondaryColor,
