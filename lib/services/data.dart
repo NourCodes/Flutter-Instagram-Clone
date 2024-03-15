@@ -3,11 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instagram_clone/model/post_model.dart';
 import 'package:instagram_clone/services/storage.dart';
 import 'package:instagram_clone/utilities/utils.dart';
+import '../model/comment_model.dart';
 import '../model/userdata_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
 
 class Data {
+  // generate a unique ID for the post
+  final String postId = const Uuid().v1();
   //create an instance of Firebase Firestore
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -18,7 +21,7 @@ class Data {
     User currUser = FirebaseAuth.instance.currentUser!;
     // fetch user data snapshot from Firestore
     DocumentSnapshot userDataSnap =
-    await _firestore.collection('users').doc(currUser.uid).get();
+        await _firestore.collection('users').doc(currUser.uid).get();
     // construct a UserDataModel instance from the retrieved data
     UserDataModel userData = UserDataModel.fromSnap(userDataSnap);
     return userData;
@@ -26,17 +29,15 @@ class Data {
 
 // uploads a post to Firestore
   Future uploadPost(
-      String id,
-      String username,
-      Uint8List image,
-      String description,
-      String profileImage,
-      ) async {
+    String id,
+    String username,
+    Uint8List image,
+    String description,
+    String profileImage,
+  ) async {
     // initialize an empty string to store a message
     String message = "";
     try {
-      // generate a unique ID for the post
-      String postId = const Uuid().v1();
       // upload the image and get the URL
       String imageUrl = await Storage().uploadImage(image, true, "postImage");
       // create a Post object with the provided data
@@ -52,8 +53,8 @@ class Data {
       );
       // store the post data in Firestore
       await _firestore.collection("posts").doc(postId).set(
-        post.toJson(),
-      );
+            post.toJson(),
+          );
       message = "Posted";
     } catch (err) {
       // if an error occurs, store the error message
@@ -108,6 +109,34 @@ class Data {
       }
     } catch (e) {
       return (e.toString());
+    }
+  }
+
+  Future postComments(
+      String description, String username, String userId, String image) async {
+    final commentId = const Uuid().v1();
+    try {
+      if (description.isNotEmpty) {
+        CommentModel comment = CommentModel(
+            description: description,
+            userName: username,
+            postId: postId,
+            datePublished: DateTime.now(),
+            userId: userId,
+            commentId: commentId,
+            profImage: image,
+            liked: false);
+        await _firestore
+            .collection("posts")
+            .doc(postId)
+            .collection("comments")
+            .doc(commentId)
+            .set(comment.toJson());
+      } else {
+        print("There is no text");
+      }
+    } catch (e) {
+      print(e.toString());
     }
   }
 }

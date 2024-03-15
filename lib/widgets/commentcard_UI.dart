@@ -1,9 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CommentCard extends StatelessWidget {
+  final String image;
+  final DateTime date;
+  final String username;
+  final String description;
   const CommentCard({
     super.key,
+    required this.image,
+    required this.date,
+    required this.username,
+    required this.description,
   });
 
   @override
@@ -15,9 +24,10 @@ class CommentCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 foregroundImage: NetworkImage(
-                    'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=1945&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
+                  image,
+                ),
                 radius: 16,
               ),
               Padding(
@@ -29,25 +39,25 @@ class CommentCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     RichText(
-                      text: const TextSpan(
+                      text: TextSpan(
                         children: [
                           TextSpan(
-                            text: 'username',
-                            style: TextStyle(
+                            text: username,
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          TextSpan(text: '  description'),
+                          TextSpan(text: '  $description'),
                         ],
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(
+                    Padding(
+                      padding: const EdgeInsets.only(
                         top: 4,
                       ),
                       child: Text(
-                        '3/13/2024',
-                        style: TextStyle(
+                        DateFormat.yMMMd().format(date),
+                        style: const TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 10,
                         ),
