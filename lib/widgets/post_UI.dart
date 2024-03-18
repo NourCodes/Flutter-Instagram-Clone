@@ -142,16 +142,22 @@ class _PostCardState extends State<PostCard> {
                       },
                       icon: widget.likes.contains(currentUserId)
                           ? const Icon(
-                        Icons.favorite,
-                        color: Colors.red,
-                      )
+                              Icons.favorite,
+                              color: Colors.red,
+                            )
                           : const Icon(
-                        Icons.favorite_border,
-                      ),
+                              Icons.favorite_border,
+                            ),
                     ),
                   ),
                   IconButton(
-                    onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => CommentsPage(),),),
+                    onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => CommentsPage(
+                          postId: widget.postId,
+                        ),
+                      ),
+                    ),
                     icon: const Icon(
                       Icons.comment_outlined,
                     ),
@@ -182,8 +188,8 @@ class _PostCardState extends State<PostCard> {
                 // likes
                 DefaultTextStyle(
                   style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    fontWeight: FontWeight.w900,
-                  ),
+                        fontWeight: FontWeight.w900,
+                      ),
                   child: Text(
                     "${widget.likes.length} likes",
                     style: Theme.of(context).textTheme.bodyMedium,

@@ -9,7 +9,8 @@ import 'package:provider/provider.dart';
 import '../services/data.dart';
 
 class CommentsPage extends StatefulWidget {
-  const CommentsPage({super.key});
+  final String postId;
+  const CommentsPage({super.key, required this.postId});
 
   @override
   State<CommentsPage> createState() => _CommentsPageState();
@@ -62,8 +63,8 @@ class _CommentsPageState extends State<CommentsPage> {
               ),
               InkWell(
                 onTap: () async {
-                  await Data().postComments(_controller.text, userData.userName,
-                      userData.id, userData.imageUrl);
+                  await Data().postComments(widget.postId, _controller.text,
+                      userData.userName, userData.id, userData.imageUrl);
                   setState(() {});
                 },
                 child: Container(

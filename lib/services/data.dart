@@ -11,6 +11,9 @@ import 'package:uuid/uuid.dart';
 class Data {
   // generate a unique ID for the post
   final String postId = const Uuid().v1();
+  final String commentId =
+      const Uuid().v1(); // generate a unique ID for the comment.
+
   //create an instance of Firebase Firestore
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -112,11 +115,13 @@ class Data {
     }
   }
 
-  Future postComments(
-      String description, String username, String userId, String image) async {
-    final commentId = const Uuid().v1();
+// this method is for posting a comment
+  Future postComments(String postId, String description, String username,
+      String userId, String image) async {
     try {
+      // check if the comment description is not empty
       if (description.isNotEmpty) {
+        // create a CommentModel instance
         CommentModel comment = CommentModel(
             description: description,
             userName: username,
@@ -126,6 +131,7 @@ class Data {
             commentId: commentId,
             profImage: image,
             liked: false);
+        // store the comment data in Firestore
         await _firestore
             .collection("posts")
             .doc(postId)
