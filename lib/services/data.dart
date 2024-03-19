@@ -145,4 +145,21 @@ class Data {
       print(e.toString());
     }
   }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> comments(String postId) {
+    return _firestore
+        .collection("posts")
+        .doc(postId)
+        .collection("comments")
+        .orderBy("datePublished", descending: true)
+        .snapshots();
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getComments(String postId) async {
+    return await _firestore
+        .collection("posts")
+        .doc(postId)
+        .collection("comments")
+        .get();
+  }
 }

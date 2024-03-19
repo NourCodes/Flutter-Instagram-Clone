@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:instagram_clone/pages/comments_page.dart';
 import 'package:instagram_clone/services/auth.dart';
 import 'package:instagram_clone/utilities/colors.dart';
+import 'package:instagram_clone/utilities/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../services/data.dart';
@@ -34,6 +35,22 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends State<PostCard> {
   bool isLikeAnimating = false;
+  int commentsLength = 0;
+  @override
+  void initState() {
+    getComments();
+    super.initState();
+  }
+
+  void getComments() async {
+    try {
+      QuerySnapshot snap = await Data().getComments(widget.postId);
+      commentsLength = snap.docs.length;
+    } catch (e) {
+      showMessage(e.toString());
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -223,14 +240,22 @@ class _PostCardState extends State<PostCard> {
 
                 // Number of comments
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => CommentsPage(
+                          postId: widget.postId,
+                        ),
+                      ),
+                    );
+                  },
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                       vertical: 4,
                     ),
-                    child: const Text(
-                      "View all 500 Comments",
-                      style: TextStyle(
+                    child: Text(
+                      "View all $commentsLength Comments",
+                      style: const TextStyle(
                         color: secondaryColor,
                         fontSize: 10,
                       ),

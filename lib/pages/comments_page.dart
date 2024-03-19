@@ -7,6 +7,7 @@ import 'package:instagram_clone/utilities/colors.dart';
 import 'package:instagram_clone/widgets/commentcard_UI.dart';
 import 'package:provider/provider.dart';
 import '../services/data.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CommentsPage extends StatefulWidget {
   final String postId;
@@ -20,6 +21,12 @@ class _CommentsPageState extends State<CommentsPage> {
   final _controller = TextEditingController();
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final UserDataModel userData =
         Provider.of<UserDataProvider>(context).getUserData;
@@ -29,12 +36,48 @@ class _CommentsPageState extends State<CommentsPage> {
         title: const Text("Comments"),
         centerTitle: false,
       ),
-      body: CommentCard(
-        date: DateTime.now(),
-        image: userData.imageUrl,
-        description: _controller.text,
-        username: userData.userName,
-      ),
+      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          stream: Data().comments(widget.postId),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              // while waiting for data, show a loading indicator
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError) {
+              // if an error occurs, display an error message
+              return Text(
+                'Error: ${snapshot.error}',
+              );
+            } else if (snapshot.data!.docs.isEmpty) {
+              // if there are no documents in the snapshot, display a message
+              return const Center(
+                child: Text(
+                  "No Comments Yet!",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              );
+            } else {
+              // if data is available, display it
+              return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  final data = snapshot.data!.docs[index];
+                  // convert Firestore Timestamp to DateTime
+                  DateTime datePublished =
+                      (data["datePublished"] as Timestamp).toDate();
+                  return CommentCard(
+                    date: datePublished,
+                    image: data["profImage"],
+                    description: data["description"],
+                    username: data["username"],
+                  );
+                },
+              );
+            }
+          }),
       bottomNavigationBar: SafeArea(
         child: Container(
           height: kToolbarHeight,
@@ -44,9 +87,9 @@ class _CommentsPageState extends State<CommentsPage> {
           child: Row(
             children: [
               CircleAvatar(
-                foregroundImage: NetworkImage(userData.imageUrl) ??
-                    NetworkImage(
-                        'https://images.unsplash.com/photo-1579783483458-83d02161294e?q=80&w=1997&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
+                foregroundImage: NetworkImage(
+                  userData.imageUrl,
+                ),
                 radius: 16,
               ),
               Expanded(
@@ -63,9 +106,16 @@ class _CommentsPageState extends State<CommentsPage> {
               ),
               InkWell(
                 onTap: () async {
-                  await Data().postComments(widget.postId, _controller.text,
-                      userData.userName, userData.id, userData.imageUrl);
-                  setState(() {});
+                  await Data().postComments(
+                    widget.postId,
+                    _controller.text,
+                    userData.userName,
+                    userData.id,
+                    userData.imageUrl,
+                  );
+                  setState(() {
+                    _controller.text = "";
+                  });
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(
