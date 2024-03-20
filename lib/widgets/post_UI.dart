@@ -84,7 +84,29 @@ class _PostCardState extends State<PostCard> {
                   ],
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return SimpleDialog(
+                          children: [
+                            SimpleDialogOption(
+                              child: const Text(
+                                "Delete",
+                              ),
+                              onPressed: () async {
+                                await Data().deletePost(widget.postId);
+                                if (context.mounted) {
+                                  Navigator.of(context).pop();
+                                }
+                                showMessage("Deleted Post");
+                              },
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  },
                   icon: const Icon(
                     Icons.more_vert,
                   ),

@@ -162,4 +162,13 @@ class Data {
         .collection("comments")
         .get();
   }
+
+  //this method is for deleting post
+  Future deletePost(String postId) async {
+    try {
+      return await _firestore.collection("posts").doc(postId).delete();
+    } catch (e) {
+      showMessage(e.toString());
+    }
+  }
 }
