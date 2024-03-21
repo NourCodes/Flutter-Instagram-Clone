@@ -171,4 +171,12 @@ class Data {
       showMessage(e.toString());
     }
   }
+
+  // this method searches for users whose usernames are greater than or equal to the provided user string
+  Future searchUsers(String user) async {
+    return await _firestore
+        .collection("users")
+        .where(("username"), isGreaterThanOrEqualTo: user)
+        .get();
+  }
 }
