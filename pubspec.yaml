@@ -56,7 +56,8 @@ dev_dependencies:
   provider:
   uuid:
   intl:
-  # For information on the generic Dart part of this file, see the
+  flutter_staggered_grid_view: ^0.7.0
+# For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.

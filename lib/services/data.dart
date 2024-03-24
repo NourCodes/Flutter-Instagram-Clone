@@ -179,4 +179,8 @@ class Data {
         .where(("username"), isGreaterThanOrEqualTo: user)
         .get();
   }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> get posts {
+    return _firestore.collection("posts").get();
+  }
 }
