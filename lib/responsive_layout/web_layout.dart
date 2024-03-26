@@ -1,17 +1,42 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/model/userdata_model.dart';
-import 'package:instagram_clone/provider/userdata_provider.dart';
-import 'package:provider/provider.dart';
+import '../pages/add_post_page.dart';
+import '../pages/feed_page.dart';
+import '../pages/like_page.dart';
+import '../pages/profile_page.dart';
+import '../pages/search_page.dart';
+import '../widgets/bottom_nav_bar.dart';
 
-class WebScreen extends StatelessWidget {
+class WebScreen extends StatefulWidget {
   const WebScreen({Key? key}) : super(key: key);
 
   @override
+  State<WebScreen> createState() => _WebScreenState();
+}
+
+class _WebScreenState extends State<WebScreen> {
+  int _currentPageIndex = 0;
+
+  List<Widget> lists = const [
+    FeedPage(),
+    SearchPage(),
+    AddPostPage(),
+    LikePage(),
+    ProfilePage(),
+  ];
+  void onTapped(int page) {
+    setState(() {
+      _currentPageIndex = page;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    UserDataModel userData = Provider.of<UserDataProvider>(context).getUserData;
     return Scaffold(
-      body: Center(
-        child: Text(userData.userName),
+      body: lists[_currentPageIndex],
+      bottomNavigationBar: BottomNavBar(
+        page: _currentPageIndex,
+        onTapped: onTapped,
       ),
     );
   }

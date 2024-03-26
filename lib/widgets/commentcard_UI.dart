@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/utilities/colors.dart';
 import 'package:intl/intl.dart';
 
 class CommentCard extends StatelessWidget {
@@ -45,9 +46,14 @@ class CommentCard extends StatelessWidget {
                             text: username,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
+                              color: primaryColor,
                             ),
                           ),
-                          TextSpan(text: '  $description'),
+                          TextSpan(
+                              text: '  $description',
+                              style: const TextStyle(
+                                color: primaryColor,
+                              )),
                         ],
                       ),
                     ),
