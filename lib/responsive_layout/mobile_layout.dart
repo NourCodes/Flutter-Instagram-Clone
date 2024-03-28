@@ -31,8 +31,6 @@ class _MobileScreenState extends State<MobileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // UserDataModel userData = Provider.of<UserDataProvider>(context).getUserData;
-
     return Scaffold(
       body: lists[_page],
       bottomNavigationBar: BottomNavBar(
