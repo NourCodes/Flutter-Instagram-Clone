@@ -5,6 +5,8 @@ import '../pages/feed_page.dart';
 import '../pages/like_page.dart';
 import '../pages/profile_page.dart';
 import '../pages/search_page.dart';
+import '../services/auth.dart';
+import '../services/data.dart';
 import '../widgets/bottom_nav_bar.dart';
 
 class WebScreen extends StatefulWidget {
@@ -17,12 +19,14 @@ class WebScreen extends StatefulWidget {
 class _WebScreenState extends State<WebScreen> {
   int _currentPageIndex = 0;
 
-  List<Widget> lists = const [
-    FeedPage(),
-    SearchPage(),
-    AddPostPage(),
-    LikePage(),
-    ProfilePage(),
+  List<Widget> lists = [
+    const FeedPage(),
+    const SearchPage(),
+    const AddPostPage(),
+    const LikePage(),
+    ProfilePage(
+      uid: Auth().currentUserId,
+    ),
   ];
   void onTapped(int page) {
     setState(() {

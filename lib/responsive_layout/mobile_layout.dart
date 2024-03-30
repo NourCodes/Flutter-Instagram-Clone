@@ -5,6 +5,7 @@ import 'package:instagram_clone/pages/profile_page.dart';
 import 'package:instagram_clone/widgets/bottom_nav_bar.dart';
 import '../pages/like_page.dart';
 import '../pages/search_page.dart';
+import '../services/auth.dart';
 
 class MobileScreen extends StatefulWidget {
   const MobileScreen({Key? key}) : super(key: key);
@@ -21,12 +22,14 @@ class _MobileScreenState extends State<MobileScreen> {
     });
   }
 
-  List<Widget> lists = const [
-    FeedPage(),
-    SearchPage(),
-    AddPostPage(),
-    LikePage(),
-    ProfilePage(),
+  List<Widget> lists = [
+    const FeedPage(),
+    const SearchPage(),
+    const AddPostPage(),
+    const LikePage(),
+    ProfilePage(
+      uid: Auth().currentUserId,
+    ),
   ];
 
   @override

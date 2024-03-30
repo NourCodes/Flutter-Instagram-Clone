@@ -183,4 +183,26 @@ class Data {
   Future<QuerySnapshot<Map<String, dynamic>>> get posts {
     return _firestore.collection("posts").get();
   }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUserData(String id) async {
+    try {
+      return await _firestore.collection("users").doc(id).get();
+    } catch (e) {
+      showMessage(e.toString());
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<int> getNumberOfPosts(String userId) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+          .collection("posts")
+          .where("id", isEqualTo: userId)
+          .get();
+      return snapshot.docs.length;
+    } catch (e) {
+      showMessage(e.toString());
+      throw Exception(e.toString());
+    }
+  }
 }
