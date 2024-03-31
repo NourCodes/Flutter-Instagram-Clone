@@ -10,6 +10,7 @@ class Auth {
 
   //sign up method
   Future<UserModel?> signUp(
+      String? bio,
       String email,
       String password,
       String fullName,
@@ -34,7 +35,7 @@ class Auth {
 
         // add user details to Firestore
         Data()
-            .saveUserData(email, password, fullName, userName, user!.uid, file);
+            .saveUserData(email, password, fullName, bio, userName, user!.uid, file);
         message = 'Successfully Signed Up';
         return _userFromFirebase(user);
       }

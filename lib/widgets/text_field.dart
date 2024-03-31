@@ -4,7 +4,7 @@ class TextFiledWidget extends StatelessWidget {
   final bool obscure;
   final String hintText;
   final TextInputType inputType;
-  final TextEditingController controller;
+  final TextEditingController? controller;
   const TextFiledWidget({
     Key? key,
     required this.obscure,

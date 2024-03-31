@@ -5,6 +5,7 @@ class UserDataModel {
   final String email;
   final String fullName;
   final String userName;
+  final String? bio; // optional bio field
   final String password;
   final String imageUrl;
   final List followers;
@@ -13,6 +14,7 @@ class UserDataModel {
     required this.email,
     required this.fullName,
     required this.userName,
+    this.bio,
     required this.password,
     required this.imageUrl,
     required this.followers,
@@ -23,6 +25,7 @@ class UserDataModel {
   // method to convert UserDataModel instance to JSON format
   Map<String, dynamic> toJson() {
     return {
+      "bio": bio,
       'email': email,
       'full name': fullName,
       'username': userName,
@@ -42,6 +45,7 @@ class UserDataModel {
     }
 
     return UserDataModel(
+      bio: snapshot["bio"], // optional bio field
       email: snapshot['email'] ?? '',
       fullName: snapshot['full name'] ?? '',
       userName: snapshot['username'] ?? '',

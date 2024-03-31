@@ -21,13 +21,23 @@ class _ProfilePageState extends State<ProfilePage> {
   int numPosts = 0;
   getData() async {
     var snap = await Data().getUserData(widget.uid);
-    numPosts = await Data().getNumberOfPosts(widget.uid);
 
-    // check if the widget is still mounted before calling setState
-    if (mounted) {
-      setState(() {
-        userData = snap.data()!;
-      });
+    // check if the snapshot data is null
+    if (snap.exists) {
+      // retrieve data only if the snapshot exists
+      var data = snap.data();
+
+      // check if data is not null and is of type Map
+      if (data != null) {
+        numPosts = await Data().getNumberOfPosts(widget.uid);
+
+        // update the state only if the widget is still mounted
+        if (mounted) {
+          setState(() {
+            userData = data;
+          });
+        }
+      }
     }
   }
 
@@ -141,32 +151,33 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
 
-                      Container(
-                        padding: const EdgeInsets.only(
-                          top: 5,
-                        ),
-                        child: const Text(
-                          "username",
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      Text(
+                        userData["bio"].toString().isEmpty
+                            ? ""
+                            : userData["full name"],
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       Container(
                         padding: const EdgeInsets.only(
                           top: 1,
                         ),
-                        child: const Text(
-                          "Description",
-                          style: TextStyle(
+                        child: Text(
+                          userData["bio"],
+                          style: const TextStyle(
                             fontSize: 10,
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      userData["bio"].toString().isEmpty
+                          ? const SizedBox(
+                              height: 0,
+                            )
+                          : const SizedBox(
+                              height: 16,
+                            ),
                       const Divider(),
                     ],
                   ),

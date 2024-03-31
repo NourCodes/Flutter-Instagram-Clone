@@ -76,13 +76,14 @@ class Data {
 
 //this method takes userdata uploads profile image, creates a new UserDataModel instance using the provided data, converts it
 // to JSON format using the toJson method, and then saves it to the Firestore database
-  Future<void> saveUserData(String email, String password, String fullName,
+  Future<void> saveUserData(String email, String password, String fullName, String? bio,
       String userName, String id, Uint8List file) async {
     // upload user profile image to storage and get the image URL
     String imageUrl = await Storage().uploadImage(file, false, "profileImages");
 
     // create a UserDataModel instance with provided data
     UserDataModel userData = UserDataModel(
+      bio: bio,
       email: email,
       fullName: fullName,
       userName: userName,

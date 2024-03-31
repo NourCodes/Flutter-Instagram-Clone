@@ -19,6 +19,7 @@ class _SignupPageState extends State<SignupPage> {
   final _passwordController = TextEditingController();
   final _fullNameController = TextEditingController();
   final _usernameController = TextEditingController();
+  TextEditingController? _bioController;
   Uint8List? _file;
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
@@ -26,6 +27,8 @@ class _SignupPageState extends State<SignupPage> {
   @override
   void initState() {
     Auth().users;
+    _bioController = TextEditingController(); // Initialize the bio controller
+
     super.initState();
   }
 
@@ -33,6 +36,9 @@ class _SignupPageState extends State<SignupPage> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _usernameController.dispose();
+    _fullNameController.dispose();
+    _bioController?.dispose();
     super.dispose();
   }
 
@@ -151,7 +157,15 @@ class _SignupPageState extends State<SignupPage> {
                   const SizedBox(
                     height: 23,
                   ),
-
+                  TextFiledWidget(
+                    obscure: false,
+                    hintText: "Write your bio",
+                    inputType: TextInputType.text,
+                    controller: _bioController,
+                  ),
+                  const SizedBox(
+                    height: 23,
+                  ),
                   _isLoading
                       ? const CircularProgressIndicator(
                           color: primaryColor,
@@ -176,6 +190,7 @@ class _SignupPageState extends State<SignupPage> {
                                 _isLoading = true;
                               });
                               await Auth().signUp(
+                                _bioController?.text,
                                 _emailController.text,
                                 _passwordController.text,
                                 _fullNameController.text,
