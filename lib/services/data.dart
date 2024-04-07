@@ -76,8 +76,8 @@ class Data {
 
 //this method takes userdata uploads profile image, creates a new UserDataModel instance using the provided data, converts it
 // to JSON format using the toJson method, and then saves it to the Firestore database
-  Future<void> saveUserData(String email, String password, String fullName, String? bio,
-      String userName, String id, Uint8List file) async {
+  Future<void> saveUserData(String email, String password, String fullName,
+      String? bio, String userName, String id, Uint8List file) async {
     // upload user profile image to storage and get the image URL
     String imageUrl = await Storage().uploadImage(file, false, "profileImages");
 
@@ -201,6 +201,18 @@ class Data {
           .where("id", isEqualTo: userId)
           .get();
       return snapshot.docs.length;
+    } catch (e) {
+      showMessage(e.toString());
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getUserPost(String uid) async {
+    try {
+      return await _firestore
+          .collection("posts")
+          .where(("id"), isEqualTo: uid)
+          .get();
     } catch (e) {
       showMessage(e.toString());
       throw Exception(e.toString());

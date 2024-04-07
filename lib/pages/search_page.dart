@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/pages/profile_page.dart';
 import 'package:instagram_clone/utilities/colors.dart';
 import '../services/data.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -122,11 +123,24 @@ class _SearchPageState extends State<SearchPage> {
                     itemCount: snapshot.data.docs.length,
                     itemBuilder: (context, index) {
                       var snaps = snapshot.data.docs[index];
-                      return ListTile(
-                        leading: CircleAvatar(
-                          foregroundImage: NetworkImage(snaps["photoUrl"]),
+                      return InkWell(
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ProfilePage(
+                              uid: snaps["id"],
+                            ),
+                          ),
                         ),
-                        title: Text(snaps["username"]),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            foregroundImage: NetworkImage(
+                              snaps["photoUrl"],
+                            ),
+                          ),
+                          title: Text(
+                            snaps["username"],
+                          ),
+                        ),
                       );
                     },
                   );
