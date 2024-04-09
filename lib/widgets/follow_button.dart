@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FollowButton extends StatelessWidget {
@@ -19,7 +18,7 @@ class FollowButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: function,
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor,
         fixedSize: const Size(250, 16),

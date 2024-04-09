@@ -8,6 +8,7 @@ import '../model/userdata_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
 
+
 class Data {
   // generate a unique ID for the post
   final String postId = const Uuid().v1();
@@ -218,4 +219,30 @@ class Data {
       throw Exception(e.toString());
     }
   }
+
+  Future followUser(String followId, String uid,) async {
+    try {
+     DocumentSnapshot snap = await _firestore.collection("users").doc(uid).get();
+     List following = (snap.data()! as Map<String, dynamic>)["following"];
+      if (following.contains(followId)){
+        await _firestore.collection("users").doc(uid).update({
+          "following": FieldValue.arrayRemove([followId])
+        });
+        await _firestore.collection("users").doc(followId).update({
+          "followers": FieldValue.arrayRemove([uid])
+        });
+
+      }else {
+        await _firestore.collection("users").doc(uid).update({
+          "following": FieldValue.arrayUnion([followId])
+        });
+        await _firestore.collection("users").doc(followId).update({
+          "followers": FieldValue.arrayUnion([uid])
+        });
+      }
+    } catch (e) {
+      showMessage(e.toString());
+    }
+  }
+
 }

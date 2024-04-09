@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/pages/add_post_page.dart';
+import 'package:instagram_clone/services/auth.dart';
 import 'package:instagram_clone/utilities/colors.dart';
 import 'package:instagram_clone/widgets/follow_button.dart';
 import '../services/data.dart';
@@ -21,6 +22,9 @@ class _ProfilePageState extends State<ProfilePage> {
   var userData = {};
   int numPosts = 0;
   bool isLoading = false;
+  bool isFollowed = false;
+  int followers = 0;
+  int following = 0;
 
   Future<void> getData() async {
     setState(() {
@@ -33,7 +37,6 @@ class _ProfilePageState extends State<ProfilePage> {
     if (snap.exists) {
       // retrieve data only if the snapshot exists
       var data = snap.data();
-
       // check if data is not null and is of type Map
       if (data != null) {
         numPosts = await Data().getNumberOfPosts(widget.uid);
@@ -42,6 +45,9 @@ class _ProfilePageState extends State<ProfilePage> {
           userData = data;
         });
       }
+      isFollowed = userData["followers"].contains(Auth().currentUserId);
+      followers = userData["followers"].length;
+      following = userData["following"].length;
     }
   }
 
@@ -54,7 +60,8 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? const Center(child: CircularProgressIndicator())
+        ? const Center(child: CircularProgressIndicator(),
+    )
         : userData.isEmpty
             ? const Center(
                 child: CircularProgressIndicator(),
@@ -137,14 +144,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       numPosts, "Posts"),
                                                   // followers
                                                   buildColumn(
-                                                      userData["followers"]
-                                                          .length,
-                                                      "Followers"),
+                                                     followers,
+                                                    "Followers"
+                                                  ),
                                                   // following
                                                   buildColumn(
-                                                      userData["following"]
-                                                          .length,
-                                                      "Following"),
+                                                      following,
+                                                      "Following",
+                                                  ),
                                                 ],
                                               ),
                                               // follow button
@@ -156,15 +163,44 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.only(
-                                                            top: 15.0),
-                                                    child: FollowButton(
-                                                      backgroundColor:
-                                                          mobileBackground,
-                                                      borderColor: Colors.grey,
-                                                      text: "Edit Profile",
-                                                      textColor: primaryColor,
-                                                      function: () {},
+                                                      top: 15.0,
                                                     ),
+                                                    child:
+                                                        Auth().currentUserId == widget.uid
+                                                            ? FollowButton(
+                                                                backgroundColor: mobileBackground,
+                                                                borderColor: Colors.grey,
+                                                                text: "Edit Profile",
+                                                                textColor: primaryColor,
+                                                                function: () {},
+                                                              )
+                                                            : isFollowed
+                                                                ? FollowButton(
+                                                                    backgroundColor: primaryColor,
+                                                                    borderColor: Colors.grey,
+                                                                    text: "Unfollow",
+                                                                    textColor: Colors.black,
+                                                                    function: () async{
+                                                                          await Data().followUser(userData["id"], Auth().currentUserId);
+                                                                          setState(() {
+                                                                            isFollowed = false;
+                                                                            followers--;
+                                                                          });
+                                                                        },
+                                                                  )
+                                                                : FollowButton(
+                                                                    backgroundColor: Colors.blue,
+                                                                    borderColor: Colors.blue,
+                                                                    text: "Follow",
+                                                                    textColor: primaryColor,
+                                                                    function: () async {
+                                                                      await Data().followUser(userData["id"], Auth().currentUserId);
+                                                                      setState(() {
+                                                                        isFollowed = true;
+                                                                        followers++;
+                                                                      });
+                                                                    },
+                                                                  ),
                                                   ),
                                                 ],
                                               ),
