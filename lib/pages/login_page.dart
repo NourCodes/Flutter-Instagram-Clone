@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/utilities/colors.dart';
+import 'package:instagram_clone/utilities/dimensions.dart';
 import 'package:instagram_clone/utilities/utils.dart';
 import 'package:instagram_clone/widgets/text_field.dart';
 import '../services/auth.dart';
@@ -26,13 +27,16 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Form(
       key: _formKey,
       child: Scaffold(
         backgroundColor: mobileBackground,
         body: SafeArea(
           child: Container(
-            padding: const EdgeInsets.symmetric(
+            padding:  width > webScreenSize ? EdgeInsets.symmetric(
+              horizontal:  MediaQuery.of(context).size.width / 3,
+            ): const EdgeInsets.symmetric(
               horizontal: 30,
             ),
             width: double.infinity,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/pages/profile_page.dart';
 import 'package:instagram_clone/utilities/colors.dart';
+import 'package:instagram_clone/utilities/dimensions.dart';
 import '../services/data.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
@@ -91,17 +92,34 @@ class _SearchPageState extends State<SearchPage> {
                     child: Text("No Posts Available"),
                   );
                 } else {
-                  return MasonryGridView.count(
-                    itemCount: snapshot.data!.docs.length,
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 5,
-                    itemBuilder: (context, index) {
-                      var snaps = snapshot.data!.docs[index];
-                      return Image.network(
-                        snaps["postUrl"],
-                      );
-                    },
-                  );
+                  return MediaQuery.of(context).size.width > webScreenSize
+                      ? AlignedGridView.count(
+                          itemCount: snapshot.data!.docs.length,
+                          crossAxisCount: 3,
+                          mainAxisSpacing: 5,
+                          crossAxisSpacing: 10,
+                          itemBuilder: (context, index) {
+                            var snaps = snapshot.data!.docs[index];
+                            return Image.network(
+                              snaps["postUrl"],
+                              fit: BoxFit.fill,
+                            );
+                          },
+                        )
+                      : MasonryGridView.count(
+                          itemCount: snapshot.data!.docs.length,
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 5,
+                          crossAxisSpacing: 10,
+                          itemBuilder: (context, index) {
+                            var snaps = snapshot.data!.docs[index];
+                            return Image.network(
+                              snaps["postUrl"],
+                              fit: BoxFit.fill,
+
+                            );
+                          },
+                        );
                 }
               },
             )
