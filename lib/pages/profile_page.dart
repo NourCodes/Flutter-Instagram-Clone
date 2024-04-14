@@ -94,14 +94,17 @@ class _ProfilePageState extends State<ProfilePage> {
                         },
                       ),
                     ),
-                    // menu icon
-                    const Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 10.0,
-                      ),
-                      child: Icon(
-                        Icons.menu,
-                        color: primaryColor,
+                    // Sign-out button
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.logout,
+                          color: primaryColor,
+                        ),
+                        onPressed: () async {
+                          await Auth().signOut();
+                        },
                       ),
                     ),
                   ],

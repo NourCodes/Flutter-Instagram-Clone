@@ -90,4 +90,9 @@ class Auth {
         .authStateChanges()
         .map((user) => user != null ? UserModel(id: user.uid) : null);
   }
+
+  Future signOut() async{
+    await _firebaseAuth.signOut();
+  }
+
 }

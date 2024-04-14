@@ -49,7 +49,9 @@ class _PostCardState extends State<PostCard> {
     } catch (e) {
       showMessage(e.toString());
     }
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
